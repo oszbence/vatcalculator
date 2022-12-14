@@ -1,6 +1,6 @@
 package com.gb.vatcalculator.controller;
 
-import com.gb.vatcalculator.dto.CalculatorDto;
+import com.gb.vatcalculator.dto.CalculationDto;
 import com.gb.vatcalculator.service.CalculatorService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class CalculatorController {
     }
 
     @GetMapping
-    public CalculatorDto calculate(BigDecimal net, BigDecimal vatAmount, BigDecimal gross, BigDecimal vatPercent) {
+    public CalculationDto calculate(BigDecimal net, BigDecimal vatAmount, BigDecimal gross, BigDecimal vatPercent) {
         return calculatorService.calculate(net, vatAmount, gross, vatPercent);
     }
 }

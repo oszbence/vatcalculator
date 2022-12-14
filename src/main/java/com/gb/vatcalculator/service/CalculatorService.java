@@ -1,6 +1,6 @@
 package com.gb.vatcalculator.service;
 
-import com.gb.vatcalculator.dto.CalculatorDto;
+import com.gb.vatcalculator.dto.CalculationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,29 +35,29 @@ public class CalculatorService {
         }
     }
 
-    private CalculatorDto calculateFromGross(BigDecimal gross, BigDecimal vatPercent) {
+    private CalculationDto calculateFromGross(BigDecimal gross, BigDecimal vatPercent) {
         checkAmount(gross);
         final var net = gross.divide(vatPercent.scaleByPowerOfTen(-2).add(BigDecimal.ONE), 2, RoundingMode.HALF_UP);
         final var vatAmount = gross.subtract(net);
-        return new CalculatorDto(net, vatAmount, gross, vatPercent);
+        return new CalculationDto(net, vatAmount, gross, vatPercent);
     }
 
-    private CalculatorDto calculateFromNet(BigDecimal net, BigDecimal vatPercent) {
+    private CalculationDto calculateFromNet(BigDecimal net, BigDecimal vatPercent) {
         checkAmount(net);
         final var gross = net.multiply(vatPercent.scaleByPowerOfTen(-2).add(BigDecimal.ONE))
                 .setScale(2, RoundingMode.HALF_UP);
         final var vatAmount = gross.subtract(net);
-        return new CalculatorDto(net, vatAmount, gross, vatPercent);
+        return new CalculationDto(net, vatAmount, gross, vatPercent);
     }
 
-    private CalculatorDto calculateFromVatAmount(BigDecimal vatAmount, BigDecimal vatPercent) {
+    private CalculationDto calculateFromVatAmount(BigDecimal vatAmount, BigDecimal vatPercent) {
         checkAmount(vatAmount);
         final var net = vatAmount.divide(vatPercent.scaleByPowerOfTen(-2), 2, RoundingMode.HALF_UP);
         final var gross = net.add(vatAmount);
-        return new CalculatorDto(net, vatAmount, gross, vatPercent);
+        return new CalculationDto(net, vatAmount, gross, vatPercent);
     }
 
-    public CalculatorDto calculate(BigDecimal net, BigDecimal vatAmount, BigDecimal gross, BigDecimal vatPercent) {
+    public CalculationDto calculate(BigDecimal net, BigDecimal vatAmount, BigDecimal gross, BigDecimal vatPercent) {
         checkVatPercent(vatPercent);
         if (net != null && vatAmount == null && gross == null) {
             return calculateFromNet(net, vatPercent);
